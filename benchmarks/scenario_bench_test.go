@@ -315,6 +315,15 @@ func BenchmarkWithoutFields(b *testing.B) {
 			}
 		})
 	})
+	b.Run("keybase/client", func(b *testing.B) {
+		logger := newKBProdLogging()
+		b.ResetTimer()
+		b.RunParallel(func(pb *testing.PB) {
+			for pb.Next() {
+				logger.Info(getMessage(0))
+			}
+		})
+	})
 	b.Run("sirupsen/logrus", func(b *testing.B) {
 		logger := newLogrus()
 		b.ResetTimer()
@@ -468,6 +477,24 @@ func BenchmarkAccumulatedContext(b *testing.B) {
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
 				logger.Infof("%v %v %v %s %v %v %v %v %v %s\n", fakeFmtArgs()...)
+			}
+		})
+	})
+	b.Run("keybase/client", func(b *testing.B) {
+		logger := newKBProdLogging()
+		b.ResetTimer()
+		b.RunParallel(func(pb *testing.PB) {
+			for pb.Next() {
+				logger.Info(getMessage(0))
+			}
+		})
+	})
+	b.Run("keybase/client.Fmt", func(b *testing.B) {
+		logger := newKBProdLogging()
+		b.ResetTimer()
+		b.RunParallel(func(pb *testing.PB) {
+			for pb.Next() {
+				logger.Info("%v %v %v %s %v %v %v %v %v %s\n", fakeFmtArgs()...)
 			}
 		})
 	})
